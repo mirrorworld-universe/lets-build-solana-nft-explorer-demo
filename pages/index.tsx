@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useMirrorWorld } from "../hooks/useMirrorWorld";
 import {
   Button,
@@ -18,16 +18,21 @@ import type { SolanaNFTExtended } from "@mirrorworld/web3.js/dist/declarations/s
 import { NftCard } from "../components/NftCard";
 
 export default function Home() {
+  /**
+   * The useMirrorWorld hook handles user authentication and provides an instance
+   * of the `mirrorworld` SDK when it is initialized correctly.
+   */
   const { user, mirrorworld, login } = useMirrorWorld();
   const [walletAddress, setWalletAddress] = useState<string>();
-  const [mintAddress, setMintAddress] = useState<string>();
+  // const [mintAddress, setMintAddress] = useState<string>();
 
   const [nftResults, setNftResults] = useState<SolanaNFTExtended[]>([]);
   const hasNFTResults = useMemo(() => nftResults.length > 0, [nftResults]);
-  useEffect(() => {
-    console.log("mw", mirrorworld);
-  }, []);
 
+  /**
+   * Fetch NFTs in a wallet address
+   * @param address
+   */
   async function searchNFTsInWallet(address: string) {
     const results = await mirrorworld.getNFTsOwnedByAddress(address, {
       limit: 24,
@@ -36,15 +41,13 @@ export default function Home() {
 
     setNftResults(results);
 
-    // const results = await mirrorworld.fetchNFTsByOwnerAddresses({
-    //   owners: [address],
-    //   limit: 24,
-    //   offset: 0,
-    // });
-
     console.log("NFTs in address", results);
   }
 
+  /**
+   * Will fetch an NFT by it's mint address. It returns metadata for the corresponding NFT
+   * @param address
+   */
   async function fetchNFTsByMintAddresses(address: string) {
     const results = await mirrorworld.fetchNFTsByMintAddresses({
       mintAddresses: [address],
@@ -90,18 +93,6 @@ export default function Home() {
             ))}
           </Wrap>
         )}
-        {/*<Stack as="main" w="full">*/}
-        {/*  <div>*/}
-        {/*    <h3>Search NFT by mint address</h3>*/}
-        {/*    <input*/}
-        {/*      value={mintAddress}*/}
-        {/*      onChange={(event) => setMintAddress(event.target.value)}*/}
-        {/*    />*/}
-        {/*    <Button onClick={() => fetchNFTsByMintAddresses(mintAddress!)}>*/}
-        {/*      Search by mint address!!!!*/}
-        {/*    </Button>*/}
-        {/*  </div>*/}
-        {/*</Stack>*/}
       </Stack>
     </Container>
   );
