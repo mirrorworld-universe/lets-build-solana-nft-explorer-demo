@@ -54,7 +54,6 @@ export default function Home() {
       limit: 20,
       offset: 0,
     });
-    console.log("mints", results);
   }
 
   return (

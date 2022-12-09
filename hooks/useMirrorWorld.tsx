@@ -38,7 +38,6 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   async function login() {
     if (!mirrorworld) throw new Error("Mirror World SDK is not initialized");
     const result = await mirrorworld.login();
-    console.log("result", result);
     if (result.user) {
       setUser(result.user);
       localStorage.setItem(storageKey, result.refreshToken);
@@ -48,7 +47,7 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   function initialize() {
     const refreshToken = localStorage.getItem(storageKey);
     const instance = new MirrorWorld({
-      apiKey: "mw_YOUR_SUPER_SECRET_API_KEY",
+      apiKey: "mw_lOquhiJd8VSQas6fY3Q42f5pjKMbkUE6rqt",
       env: ClusterEnvironment.mainnet,
       ...(refreshToken && { autoLoginCredentials: refreshToken }),
     });
