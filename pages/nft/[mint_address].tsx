@@ -177,7 +177,7 @@ export default function NftPage() {
                     </Thead>
                     <Tbody>
                       {nftDetails.listings.map((listing, i) => (
-                        <Tr>
+                        <Tr key={i}>
                           <Td>Sell</Td>
                           <Td>
                             {listing.price}{" "}
