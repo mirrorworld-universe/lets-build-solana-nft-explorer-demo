@@ -22,17 +22,33 @@ import {
   CircularProgress,
   CircularProgressLabel,
   SimpleGrid,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useMirrorWorld } from "../../hooks/useMirrorWorld";
-import type { SolanaNFTExtended } from "@mirrorworld/web3.js/dist/declarations/src/types/nft";
-import { AiOutlineCopy } from "react-icons/ai";
+import type {
+  SolanaNFTExtended,
+  SolanaNFTListing,
+} from "@mirrorworld/web3.js/dist/declarations/src/types/nft";
+import { AiOutlineCopy, AiOutlineLink } from "react-icons/ai";
 import { BsGlobe } from "react-icons/bs";
 
-export interface SolanaNFTExtendedPolyfill extends SolanaNFTExtended {
+export interface ListingsExtended extends SolanaNFTListing {
   auctionHouse: AuctionHouse;
+}
+
+export interface SolanaNFTExtendedPolyfill extends SolanaNFTExtended {
   mintAddress: string;
+  listings: ListingsExtended[];
 }
 export interface AuctionHouse {
   address: string;
@@ -40,6 +56,11 @@ export interface AuctionHouse {
   treasuryMint: string;
   sellerFeeBasisPoints: number;
 }
+
+export const SolanaTradingCurrencyNames: Record<string, any> = {
+  EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: "USDC",
+  So11111111111111111111111111111111111111112: "SOL",
+};
 
 export default function NftPage() {
   const toast = useToast();
@@ -139,7 +160,59 @@ export default function NftPage() {
                     <Image src={nftDetails.image} alt={nftDetails.name} />
                   </AspectRatio>
                 </chakra.div>
-                <Heading size={"lg"}>Attributes</Heading>
+                <Heading size={"lg"}>Marketplace Activity</Heading>
+                <TableContainer>
+                  <Table variant="simple">
+                    <TableCaption>
+                      Imperial to metric conversion factors
+                    </TableCaption>
+                    <Thead>
+                      <Tr>
+                        <Th>Event</Th>
+                        <Th isNumeric>Prices</Th>
+                        <Th>From</Th>
+                        <Th>Date</Th>
+                        <Th>Marketplace</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {nftDetails.listings.map((listing, i) => (
+                        <Tr>
+                          <Td>Sell</Td>
+                          <Td>
+                            {listing.price}{" "}
+                            {SolanaTradingCurrencyNames[
+                              listing.auctionHouse.treasuryMint
+                            ] || "SOL"}
+                          </Td>
+                          <Td>
+                            <Text maxW={"100px"} noOfLines={1}>
+                              {listing.seller}
+                            </Text>
+                          </Td>
+                          <Td>
+                            <Text maxW={"100px"} noOfLines={1}>
+                              {listing.createdAt}
+                            </Text>
+                          </Td>
+                          <Td>
+                            <Link
+                              isExternal
+                              href={`https://explorer.solana.com/address/${listing.auctionHouse.address}`}
+                            >
+                              <Button
+                                variant="ghost"
+                                leftIcon={<AiOutlineLink />}
+                              >
+                                View
+                              </Button>
+                            </Link>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
               </Stack>
             </GridItem>
             <GridItem h={"800px"}>
@@ -182,7 +255,7 @@ export default function NftPage() {
                   {/*    </WrapItem>*/}
                   {/*  ))}*/}
                   {/*</Wrap>*/}
-                  <SimpleGrid minChildWidth={"200px"} spacing={3}>
+                  <SimpleGrid minChildWidth={"150px"} spacing={3}>
                     {nftDetails.attributes.map((attr, i) => (
                       <Stack
                         key={i}
