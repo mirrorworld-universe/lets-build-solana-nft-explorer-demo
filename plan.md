@@ -27,4 +27,3 @@ Views
 - [ ] Search by .sol domain
 
 Wallet addresS: 7KfTdzjfWw8G5MyYz7tfv3Y9DcnvY1FJWRhcR2zeJjA1
-## API Key: mw_Nj4PVsRU0e932QisHQYa7dBrPrQOQipbLwf
