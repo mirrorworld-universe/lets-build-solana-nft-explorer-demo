@@ -21,7 +21,7 @@ export interface IMirrorWorldContext {
   login(): Promise<void>;
 }
 
-const MIRROR_WORLD_API_KEY = process.env.MIRROR_WORLD_API_KEY
+const MIRROR_WORLD_API_KEY = process.env.MIRROR_WORLD_API_KEY || "mw_Nj4PVsRU0e932QisHQYa7dBrPrQOQipbLwf"
 
 const MirrorWorldContext = createContext<IMirrorWorldContext>(
   {} as IMirrorWorldContext
