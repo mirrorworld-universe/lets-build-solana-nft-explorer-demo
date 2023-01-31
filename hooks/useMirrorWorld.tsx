@@ -21,7 +21,7 @@ export interface IMirrorWorldContext {
   login(): Promise<void>;
 }
 
-const MIRRORWORLD_API_KEY = process.env.MIRRORWORLD_API_KEY
+const MIRROR_WORLD_API_KEY = process.env.MIRROR_WORLD_API_KEY
 
 const MirrorWorldContext = createContext<IMirrorWorldContext>(
   {} as IMirrorWorldContext
@@ -51,7 +51,7 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   }
 
   function initialize() {
-    if (!MIRRORWORLD_API_KEY) {
+    if (!MIRROR_WORLD_API_KEY) {
       return toast({
         title: "Missing API Key",
         description: "Looks like you're missing a Mirror World API Key. Please create one on the developer dashboard https://app.mirrorworld.fun",
