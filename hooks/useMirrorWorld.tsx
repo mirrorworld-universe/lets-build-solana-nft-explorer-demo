@@ -47,7 +47,7 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   function initialize() {
     const refreshToken = localStorage.getItem(storageKey);
     const instance = new MirrorWorld({
-      apiKey: "mw_lOquhiJd8VSQas6fY3Q42f5pjKMbkUE6rqt",
+      apiKey: "mw_GG2RsTkHamLkJRA6oBW2pGn1iwIQY4HAhDJ",
       env: ClusterEnvironment.mainnet,
       ...(refreshToken && { autoLoginCredentials: refreshToken }),
     });
