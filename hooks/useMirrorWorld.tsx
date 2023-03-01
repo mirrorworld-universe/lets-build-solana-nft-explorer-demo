@@ -12,6 +12,7 @@ import {
   useEffect,
   useRef,
 } from "react";
+import { useToast } from "@chakra-ui/react"
 import { ClusterEnvironment, IUser, MirrorWorld } from "@mirrorworld/web3.js";
 import { MIRROR_WORLD_API_KEY } from "../utils/env";
 
@@ -37,9 +38,12 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUser>();
   const isInitialized = useRef(false);
 
+  const toast = useToast()
+
   async function login() {
     if (!mirrorworld) throw new Error("Mirror World SDK is not initialized");
     const result = await mirrorworld.login();
+    console.log("result", result);
     if (result.user) {
       setUser(result.user);
       localStorage.setItem(storageKey, result.refreshToken);
@@ -47,6 +51,13 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   }
 
   function initialize() {
+    if (!MIRROR_WORLD_API_KEY) {
+      return toast({
+        title: "Missing API Key",
+        description: "Looks like you're missing a Mirror World API Key. Please create one on the developer dashboard https://app.mirrorworld.fun",
+        position: "bottom"
+      })
+    }
     const refreshToken = localStorage.getItem(storageKey);
     const instance = new MirrorWorld({
       apiKey: MIRROR_WORLD_API_KEY,
