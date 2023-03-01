@@ -40,7 +40,8 @@ import type {
   SolanaNFTListing,
 } from "@mirrorworld/web3.js/dist/declarations/src/types/nft";
 import { AiOutlineCopy, AiOutlineLink } from "react-icons/ai";
-import { BsGlobe } from "react-icons/bs";
+import { BsArrowLeftShort, BsGlobe } from "react-icons/bs";
+import NextLink from "next/link"
 
 export interface ListingsExtended extends SolanaNFTListing {
   auctionHouse: AuctionHouse;
@@ -121,6 +122,11 @@ export default function NftPage() {
 
   return (
     <Container maxW={"container.xl"} paddingY={32}>
+      <NextLink href='/'>
+        <Button my="4" leftIcon={<BsArrowLeftShort />} colorScheme="blue" variant={"outline"} size="sm">
+          Home
+        </Button>
+      </NextLink>
       {nftDetails ? (
         <Stack spacing={8}>
           <Heading as="h1" fontSize={["4xl", "4xl", "6xl"]}>

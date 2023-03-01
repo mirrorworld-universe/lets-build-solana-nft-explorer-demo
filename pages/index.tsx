@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMirrorWorld } from "../hooks/useMirrorWorld";
 import {
   Button,
@@ -16,8 +16,10 @@ import {
 } from "@chakra-ui/react";
 import type { SolanaNFTExtended } from "@mirrorworld/web3.js/dist/declarations/src/types/nft";
 import { NftCard } from "../components/NftCard";
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter()
   /**
    * The useMirrorWorld hook handles user authentication and provides an instance
    * of the `mirrorworld` SDK when it is initialized correctly.
@@ -25,6 +27,25 @@ export default function Home() {
   const { user, mirrorworld, login } = useMirrorWorld();
   const [walletAddress, setWalletAddress] = useState<string>();
   // const [mintAddress, setMintAddress] = useState<string>();
+  
+  const [searchAddress, setSearchAddress] = useState<string>();
+
+  useEffect(() => {
+    if (searchAddress) {
+      router.replace({
+        query: {
+          address: searchAddress
+        }
+      })
+    }
+  }, [searchAddress, router])
+
+  useEffect(() => {
+    if (router.query.address) {
+      setWalletAddress(router.query.address as string)
+      searchNFTsInWallet(router.query.address as string)
+    }
+  }, [router.query])
 
   const [nftResults, setNftResults] = useState<SolanaNFTExtended[]>([]);
   const hasNFTResults = useMemo(() => nftResults.length > 0, [nftResults]);
@@ -34,13 +55,13 @@ export default function Home() {
    * @param address
    */
   async function searchNFTsInWallet(address: string) {
-    const results = await mirrorworld.getNFTsOwnedByAddress(address, {
-      limit: 24,
+    const results = await mirrorworld.fetchNFTsByOwnerAddresses({
+      owners: [address],
+      limit: 30,
       offset: 0,
     });
 
     setNftResults(results);
-
     console.log("NFTs in address", results);
   }
 
@@ -72,7 +93,7 @@ export default function Home() {
             value={walletAddress}
             onChange={(event) => setWalletAddress(event.target.value)}
           />
-          <Button onClick={() => searchNFTsInWallet(walletAddress!)}>
+          <Button onClick={() => setSearchAddress(walletAddress!)}>
             Search
           </Button>
         </HStack>
@@ -84,7 +105,7 @@ export default function Home() {
             </Alert>
           </Center>
         ) : (
-          <Wrap>
+          <Wrap spacing={4}>
             {nftResults.map((nft, i) => (
               <WrapItem key={i}>
                 <NftCard nft={nft} />

@@ -16,6 +16,7 @@ import {
 import { MdOutlineContentCopy } from "react-icons/md";
 import { FiExternalLink } from "react-icons/fi";
 import copy from "copy-to-clipboard";
+import { useRouter } from 'next/router';
 
 export interface NftCardProps {
   nft: SolanaNFTExtended;
@@ -23,6 +24,7 @@ export interface NftCardProps {
 
 export function NftCard(props: NftCardProps) {
   const toast = useToast();
+  const router = useRouter()
   return (
     <Box
       maxW="200px"
@@ -31,7 +33,7 @@ export function NftCard(props: NftCardProps) {
       rounded={"lg"}
       overflow={"hidden"}
     >
-      <AspectRatio ratio={1}>
+      <AspectRatio ratio={1} w={"200px"} bg="gray.700">
         <Image src={props.nft.image} alt={props.nft.name} />
       </AspectRatio>
       <Stack px={3} py={2} maxW="inherit">
@@ -41,7 +43,8 @@ export function NftCard(props: NftCardProps) {
         <Text fontSize="sm" noOfLines={2} color={"whiteAlpha.600"}>
           {props.nft.description}
         </Text>
-        <Button variant="outline">View</Button>
+        {/*@ts-ignore */}
+        <Button variant="outline" onClick={() => router.push(`/nft/${props.nft.mintAddress}`)}>View</Button>
         <HStack>
           {/*@ts-ignore*/}
           <Tooltip label={props.nft.mintAddress}>

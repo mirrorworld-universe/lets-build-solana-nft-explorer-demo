@@ -13,12 +13,14 @@ import {
   useRef,
 } from "react";
 import { ClusterEnvironment, IUser, MirrorWorld } from "@mirrorworld/web3.js";
+import { MIRROR_WORLD_API_KEY } from "../utils/env";
 
 export interface IMirrorWorldContext {
   user?: IUser;
   mirrorworld: MirrorWorld;
   login(): Promise<void>;
 }
+
 
 const MirrorWorldContext = createContext<IMirrorWorldContext>(
   {} as IMirrorWorldContext
@@ -47,7 +49,7 @@ export const MirrorWorldProvider = ({ children }: { children: ReactNode }) => {
   function initialize() {
     const refreshToken = localStorage.getItem(storageKey);
     const instance = new MirrorWorld({
-      apiKey: "mw_GG2RsTkHamLkJRA6oBW2pGn1iwIQY4HAhDJ",
+      apiKey: MIRROR_WORLD_API_KEY,
       env: ClusterEnvironment.mainnet,
       ...(refreshToken && { autoLoginCredentials: refreshToken }),
     });
